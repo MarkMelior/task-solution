@@ -57,26 +57,31 @@ function formatValue(value: any): string {
  */
 export function log<T = any, R = any>(
   name: string,
-  fn: (input: T) => R,
+  fn: ((input: T) => R) | Array<(input: T) => R>,
   input: T,
   expected?: R
 ): void {
-  const result = fn(input);
-  const passed =
-    expected !== undefined ? JSON.stringify(result) === JSON.stringify(expected) : true;
+  const fns = Array.isArray(fn) ? fn : [fn];
 
-  const status = passed ? `${colors.green}✓${colors.reset}` : `${colors.red}✗${colors.reset}`;
+  fns.forEach((currentFn) => {
+    const fnName = currentFn.name || '[anonymous]';
+    const label = `${name} (${fnName})`;
 
-  console.log(`\n${status} ${colors.bright}${name}${colors.reset}`);
-  console.log(`  ${colors.cyan}Input:${colors.reset}    ${formatValue(input)}`);
-  console.log(`  ${colors.blue}Output:${colors.reset}   ${formatValue(result)}`);
+    const result = currentFn(input);
+    const passed =
+      expected !== undefined ? JSON.stringify(result) === JSON.stringify(expected) : true;
 
-  if (expected !== undefined) {
-    console.log(`  ${colors.gray}Expected:${colors.reset} ${formatValue(expected)}`);
-    if (!passed) {
-      console.log(`  ${colors.red}FAILED${colors.reset}`);
+    const status = passed ? `${colors.green}✓${colors.reset}` : `${colors.red}✗${colors.reset}`;
+
+    console.log(`\n${status} ${colors.bright}${label}${colors.reset}`);
+    console.log(`  ${colors.cyan}Input:${colors.reset}    ${formatValue(input)}`);
+    console.log(`  ${colors.blue}Output:${colors.reset}   ${formatValue(result)}`);
+
+    if (expected !== undefined) {
+      console.log(`  ${colors.gray}Expected:${colors.reset} ${formatValue(expected)}`);
+      if (!passed) console.log(`  ${colors.red}FAILED${colors.reset}`);
     }
-  }
+  });
 }
 
 /**
