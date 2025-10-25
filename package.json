@@ -1,22 +1,29 @@
 {
-	"name": "task-solution",
-	"version": "1.0.0",
-	"description": "CodeWars  \r [![CodeWars user MarkMelior](https://www.codewars.com/users/MarkMelior/badges/small)](https://www.codewars.com/users/MarkMelior)",
-	"main": "index.js",
-	"scripts": {
-		"start": "node index.js",
-		"test": "npx mocha index.js"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"@codewars/test-compat": "^1.1.0",
-		"chai": "^4.3.10",
-		"mocha": "^10.2.0",
-		"module-alias": "^2.2.3"
-	},
-	"_moduleAliases": {
-		"@root": "."
-	}
+  "name": "task-solution",
+  "version": "1.0.0",
+  "repository": "https://github.com/MarkMelior/task-solution",
+  "author": "Mark Melior",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node --loader ts-node/esm src/index.ts",
+    "dev": "nodemon --exec node --loader ts-node/esm src/index.ts",
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2"
+  }
 }
