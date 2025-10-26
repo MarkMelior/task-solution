@@ -10,16 +10,11 @@ import { l } from '@utils/logger';
 
 const VOWEL_LETTERS = new Set(['a', 'e', 'i', 'o', 'u']);
 
-export const getVowelCount = (str: string) => {
-  let result = 0;
+export const getVowelCount = (str: string) =>
   str
     .toLowerCase()
     .split('')
-    .forEach((ch) => {
-      if (VOWEL_LETTERS.has(ch)) result++;
-    });
-  return result;
-};
+    .filter((ch) => VOWEL_LETTERS.has(ch)).length;
 
 l(getVowelCount, 'morning', 2);
 
