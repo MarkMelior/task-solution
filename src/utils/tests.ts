@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
+import { analyzeComplexity } from './analyzeComplexity';
 
 /**
  * Представляет один тестовый случай с входными данными и ожидаемым результатом
@@ -20,9 +21,6 @@ interface PerformanceOptions {
   showPerformance?: boolean;
 }
 
-/** Размеры тестовых массивов для анализа алгоритмической сложности */
-const COMPLEXITY_TEST_SIZES = [10, 100, 1000, 10000] as const;
-
 /**
  * Универсальная функция для тестирования нескольких реализаций с одинаковыми тест-кейсами.
  * Поддерживает анализ производительности и алгоритмической сложности.
@@ -43,7 +41,7 @@ const COMPLEXITY_TEST_SIZES = [10, 100, 1000, 10000] as const;
  * );
  * ```
  */
-export const tFn = <TArg, TResult>(
+export const t = <TArg, TResult>(
   funcs: Array<(input: TArg) => TResult>,
   cases: readonly TestCase<TArg, TResult>[],
   options: PerformanceOptions = {}
@@ -74,51 +72,3 @@ export const tFn = <TArg, TResult>(
     });
   });
 };
-
-/**
- * Анализирует алгоритмическую сложность функции, запуская её на массивах разного размера
- * и сравнивая рост времени выполнения с ростом размера данных.
- *
- * @param fn - Функция для анализа
- * @param sampleInput - Пример входных данных для определения типа
- * @param name - Имя функции для логирования
- */
-function analyzeComplexity<TArg, TResult>(
-  fn: (input: TArg) => TResult,
-  sampleInput: TArg,
-  name: string
-): void {
-  const timings: number[] = [];
-
-  // Замеряем время для массивов разного размера
-  COMPLEXITY_TEST_SIZES.forEach((size) => {
-    // Генерируем тестовый input на основе типа sampleInput
-    let largeInput: TArg;
-
-    if (Array.isArray(sampleInput)) {
-      // Для массивов: генерируем массив с повторяющимися элементами
-      largeInput = Array.from({ length: size }, (_, i) => i % (size / 2)) as TArg;
-    } else if (typeof sampleInput === 'string') {
-      // Для строк: генерируем строку с повторяющимися символами
-      largeInput = Array.from({ length: size }, (_, i) => String.fromCharCode(97 + (i % 26))).join(
-        ''
-      ) as TArg;
-    } else {
-      // Для остальных типов: используем оригинальный input
-      largeInput = sampleInput;
-    }
-
-    const start = performance.now();
-    fn(largeInput);
-    const elapsed = performance.now() - start;
-
-    timings.push(elapsed);
-  });
-
-  // Вычисляем соотношение роста времени к росту размера данных
-  const timeRatio = timings[timings.length - 1] / timings[0];
-  const sizeRatio =
-    COMPLEXITY_TEST_SIZES[COMPLEXITY_TEST_SIZES.length - 1] / COMPLEXITY_TEST_SIZES[0];
-
-  console.log(`📈 ${name}: ${timeRatio.toFixed(2)}x (size: ${sizeRatio}x)`);
-}

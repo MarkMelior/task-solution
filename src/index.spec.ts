@@ -1,3 +1,3 @@
-import { tFn } from '@utils/tests';
+import { t } from '@utils/tests';
 
-tFn([], []);
+t([], []);

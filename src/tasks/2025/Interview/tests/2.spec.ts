@@ -1,4 +1,4 @@
-import { tFn } from '@utils/tests';
+import { t } from '@utils/tests';
 import {
   checkPalindromeFast,
   checkPalindromeFuck,
@@ -6,7 +6,7 @@ import {
   removeDublicationShort,
 } from '../2';
 
-tFn(
+t(
   [removeDublicationCustom, removeDublicationShort],
   [
     {
@@ -17,7 +17,7 @@ tFn(
   { showPerformance: true }
 );
 
-tFn(
+t(
   [checkPalindromeFuck, checkPalindromeFast],
   [
     {

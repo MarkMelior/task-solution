@@ -1,4 +1,4 @@
-import { log } from '@utils/logger';
+import { l } from '@utils/logger';
 
 /**
  *  * 1) Написать функцию, которая проверяет, является ли строка палиндромом. Вернуть true, если является, и false если нет.
@@ -44,13 +44,8 @@ export const checkPalindromeFast = (str: string) => {
   return true;
 };
 
-log(
-  'checkPalindromeFast 1',
-  [checkPalindromeFast, checkPalindromeFuck],
-  'А Роза упала на лапу Азора',
-  true
-);
-log('checkPalindromeFast 2', [checkPalindromeFast, checkPalindromeFuck], 'Hello World', false);
+l([checkPalindromeFast, checkPalindromeFuck], 'А Роза упала на лапу Азора', true);
+l([checkPalindromeFast, checkPalindromeFuck], 'Hello World', false);
 
 /**
  *  * 2) Написать функцию, которая удаляет все дубликаты из массива.
@@ -75,8 +70,7 @@ export const removeDublicationCustom = (arr: number[]) => {
   return result;
 };
 
-log(
-  'removeDublication',
+l(
   [removeDublicationShort, removeDublicationCustom],
   [2, 3, 1, 2, 5, 2, 1, 7, 4],
   [2, 3, 1, 5, 7, 4]
