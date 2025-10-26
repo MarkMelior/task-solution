@@ -6,7 +6,7 @@
  *  • Если число делится одновременно на 3 и на 5, то рядом вывести «FizzBuzz».
  */
 
-// 1) Первое, что пришло в голову
+// 1. Первое, что пришло в голову
 for (let i = 0; i <= 100; i++) {
   let result: string = `${i} `;
   if (i % 3 === 0) result += 'Fizz';
@@ -14,7 +14,7 @@ for (let i = 0; i <= 100; i++) {
   console.log('---result', result);
 }
 
-// 2) Рекурсия
+// 2. Рекурсия
 const cycleFizzBuzz = (i = 0) => {
   if (i > 100) return;
   let result = '';
@@ -38,10 +38,10 @@ const nums = [4, 5, 1, 2, -10, 100, 5];
 
 type MinMaxFn = (arr: number[]) => [number, number];
 
-// 1) Короткий вариант
+// 1. Короткий вариант
 const getMinMaxShort: MinMaxFn = (nums) => [Math.min(...nums), Math.max(...nums)];
 
-// 2) Эффективный по памяти
+// 2. Эффективный по памяти
 const getMinMaxFast: MinMaxFn = (arr) => {
   let min = Infinity;
   let max = -Infinity;

@@ -13,13 +13,13 @@ import { log } from '@utils/logger';
  *  Выход: false
  */
 
-// Первое, что пришло в голову
+// 1. Первое, что пришло в голову
 export const checkPalindromeFuck = (str: string) => {
   const converter = str.split(' ').join('').toLocaleLowerCase();
   return converter.split('').reverse().join('') === converter;
 };
 
-// Эффективный по памяти (курсоры)
+// 2. Эффективный по памяти (курсоры)
 export const checkPalindromeFast = (str: string) => {
   const s = str.toLowerCase();
   let left = 0;
@@ -60,9 +60,11 @@ log('checkPalindromeFast 2', [checkPalindromeFast, checkPalindromeFuck], 'Hello 
  *  Выход: [2, 3, 1, 5, 7, 4]
  */
 
-const removeDublicationShort = (arr: number[]) => [...new Set(arr)];
+// 1. Короткий вариант (готовое решение)
+export const removeDublicationShort = (arr: number[]) => [...new Set(arr)];
 
-const removeDublicationCustom = (arr: number[]) => {
+// 2. Ручная реализация
+export const removeDublicationCustom = (arr: number[]) => {
   const result: number[] = [];
 
   arr.forEach((item) => {
