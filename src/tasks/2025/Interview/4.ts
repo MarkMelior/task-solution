@@ -63,4 +63,4 @@ const filter = <T>(data: T[], callback: (value: T, index: number) => boolean): T
   return result;
 };
 
-l(filter<number>, [[1, 2, 3], (value) => value !== 3], [1, 2]);
+l((data: number[]) => filter(data, (value) => value !== 3), [1, 2, 3], [1, 2]);
