@@ -32,31 +32,46 @@ function formatValue(value: any): string {
 /**
  * Логирует результат выполнения функции с красивым форматированием
  *
- * @template T - Тип входных данных
+ * @template Args - Типы входных аргументов
  * @template R - Тип результата
- * @param name - Название теста
- * @param fn - Функция для тестирования
- * @param input - Входные данные
+ * @param fn - Функция для тестирования (одна или массив)
+ * @param input - Входные данные (один аргумент или массив аргументов)
  * @param expected - Ожидаемый результат (опционально, для проверки)
  */
-export function l<T = any, R = any>(
-  fn: ((input: T) => R) | Array<(input: T) => R>,
-  input: T,
+export function l<Args extends any[], R = any>(
+  fn: ((...args: Args) => R) | Array<(...args: Args) => R>,
+  input: Args extends [infer Single] ? Single | [Single] : Args,
   expected?: R
 ): void {
   const isArray = Array.isArray(fn);
   const fns = isArray ? fn : [fn];
 
+  // Нормализуем input к массиву аргументов
+  const args =
+    Array.isArray(input) && (input.length !== 1 || Array.isArray(input[0]))
+      ? (input as Args)
+      : ([input] as Args);
+
   fns.forEach((currentFn) => {
     const fnName = currentFn.name || '[anonymous]';
-    const result = currentFn(input);
+    const result = currentFn(...args);
     const passed =
       expected !== undefined ? JSON.stringify(result) === JSON.stringify(expected) : true;
 
     const status = passed ? `${colors.green}✓${colors.reset}` : `${colors.red}✗${colors.reset}`;
 
     console.log(`\n${status} ${colors.bright}${fnName}${colors.reset}`);
-    console.log(`  ${colors.cyan}Input:${colors.reset}    ${formatValue(input)}`);
+
+    // Форматируем вывод входных данных
+    if (args.length === 1) {
+      console.log(`  ${colors.cyan}Input:${colors.reset}    ${formatValue(args[0])}`);
+    } else {
+      console.log(`  ${colors.cyan}Inputs:${colors.reset}`);
+      args.forEach((arg, i) => {
+        console.log(`    [${i}]: ${formatValue(arg)}`);
+      });
+    }
+
     console.log(`  ${colors.blue}Output:${colors.reset}   ${formatValue(result)}`);
 
     if (expected !== undefined) {
@@ -64,6 +79,9 @@ export function l<T = any, R = any>(
       if (!passed) console.log(`  ${colors.red}FAILED${colors.reset}`);
     }
 
-    if (isArray) analyzeComplexity(currentFn, input, fnName);
+    if (isArray) {
+      const wrappedFn = (argsArray: Args) => currentFn(...argsArray);
+      analyzeComplexity(wrappedFn, args, fnName);
+    }
   });
 }
