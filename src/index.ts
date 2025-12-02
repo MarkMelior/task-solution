@@ -1,1 +1,1 @@
-/** void */
+import { l } from '@utils/logger';
